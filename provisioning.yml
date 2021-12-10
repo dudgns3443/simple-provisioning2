@@ -41,7 +41,7 @@
       tags:
         Name: Public
       subnets:
-        - "{{ result_subnet.subnet_id }}"
+        - "{{ result_subnet.subnet.id }}"
       routes:
         - dest: 0.0.0.0/0
           gateway_id: "{{ result_igw.gateway_id }}"
@@ -67,5 +67,5 @@
       wait: no
       group: ins-sg
       count: 1
-      vpc_subnet_id: "{{ result_subnet.subnet_id }}"
+      vpc_subnet_id: "{{ result_subnet.subnet.id }}"
       assign_public_ip: yes 
