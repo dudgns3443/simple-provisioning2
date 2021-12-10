@@ -51,7 +51,6 @@
         name: ins-sg
         description: sg with rule descriptions
         vpc_id: "{{ result_vpc.vpc.id }}"
-        profile: "{{ aws_profile }}"
         region: "{{ aws_region }}"
         rules:
           - proto: tcp
@@ -63,10 +62,10 @@
     - name: ceetae EC2
       ec2:
         key_name: "{{ ec2_key_name }}"
-        instance_type: t3.micro
+        instance_type:"{{ instance_type }}"
         image: "{{ instance_image }}"
-        wait: yes
+        wait: no
         group: ins-sg
-        count: 3
+        count: 1
         vpc_subnet_id: "{{ result_subnet.subnet_id }}"
         assign_public_ip: yes 
