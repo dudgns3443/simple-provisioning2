@@ -62,7 +62,7 @@
   - name: ceetae EC2
     ec2:
       key_name: "{{ ec2_key_name }}"
-      instance_type:"{{ instance_type }}"
+      instance_type: "{{ instance_type }}"
       image: "{{ instance_image }}"
       wait: no
       group: ins-sg
