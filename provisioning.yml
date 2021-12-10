@@ -8,7 +8,7 @@
     vpc_cidr_block: 10.210.0.0/16
     subnet_cidr_block: 10.210.1.0/24
     instance_image: ami-0b827f3319f7447c6
-    ec2_key_name: btc_class3
+    ec2_key_name: test
     instance_type: t3.nano
     
   tasks:
@@ -36,7 +36,7 @@
     register: result_igw
   - name: Set up public subnet route table
     ec2_vpc_route_table:
-      vpc_id: vpc-1245678
+      vpc_id: "{{ result_vpc.vpc.id }}"
       region: "{{ aws_region }}"
       tags:
         Name: Public
@@ -46,4 +46,27 @@
         - dest: 0.0.0.0/0
           gateway_id: "{{ result_igw.gateway_id }}"
     register: public_route_table
-    
+    - name: example using security group rule descriptions
+      ec2_group:
+        name: ins-sg
+        description: sg with rule descriptions
+        vpc_id: "{{ result_vpc.vpc.id }}"
+        profile: "{{ aws_profile }}"
+        region: "{{ aws_region }}"
+        rules:
+          - proto: tcp
+            ports:
+            - 80
+            - 22
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 80
+    - name: ceetae EC2
+      ec2:
+        key_name: "{{ ec2_key_name }}"
+        instance_type: t3.micro
+        image: "{{ instance_image }}"
+        wait: yes
+        group: ins-sg
+        count: 3
+        vpc_subnet_id: "{{ result_subnet.subnet_id }}"
+        assign_public_ip: yes 
